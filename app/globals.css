@@ -1,3 +1,4 @@
+/* Global design tokens and shared baseline styles for the Binboi app. */
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -49,72 +50,38 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.508 0.118 165.612);
-  --primary-foreground: oklch(0.979 0.021 166.113);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.81 0.117 11.638);
-  --chart-2: oklch(0.645 0.246 16.439);
-  --chart-3: oklch(0.586 0.253 17.585);
-  --chart-4: oklch(0.514 0.222 16.935);
-  --chart-5: oklch(0.455 0.188 13.697);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.596 0.145 163.225);
-  --sidebar-primary-foreground: oklch(0.979 0.021 166.113);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.432 0.095 166.913);
-  --primary-foreground: oklch(0.979 0.021 166.113);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
+  --background: oklch(0.12 0.006 285);
+  --foreground: oklch(0.965 0.005 286);
+  --card: oklch(0.15 0.006 285);
+  --card-foreground: oklch(0.965 0.005 286);
+  --popover: oklch(0.15 0.006 285);
+  --popover-foreground: oklch(0.965 0.005 286);
+  --primary: oklch(0.72 0.115 154);
+  --primary-foreground: oklch(0.17 0.01 154);
+  --secondary: oklch(0.22 0.005 286);
+  --secondary-foreground: oklch(0.965 0.005 286);
+  --muted: oklch(0.18 0.006 286);
+  --muted-foreground: oklch(0.72 0.005 286);
+  --accent: oklch(0.18 0.008 286);
+  --accent-foreground: oklch(0.965 0.005 286);
+  --destructive: oklch(0.68 0.18 24);
   --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.81 0.117 11.638);
-  --chart-2: oklch(0.645 0.246 16.439);
-  --chart-3: oklch(0.586 0.253 17.585);
-  --chart-4: oklch(0.514 0.222 16.935);
-  --chart-5: oklch(0.455 0.188 13.697);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.696 0.17 162.48);
-  --sidebar-primary-foreground: oklch(0.262 0.051 172.552);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --input: oklch(1 0 0 / 13%);
+  --ring: oklch(0.72 0.115 154 / 70%);
+  --chart-1: oklch(0.76 0.125 154);
+  --chart-2: oklch(0.72 0.11 102);
+  --chart-3: oklch(0.69 0.11 63);
+  --chart-4: oklch(0.67 0.09 213);
+  --chart-5: oklch(0.7 0.08 326);
+  --radius: 1.15rem;
+  --sidebar: oklch(0.145 0.006 285);
+  --sidebar-foreground: oklch(0.965 0.005 286);
+  --sidebar-primary: oklch(0.72 0.115 154);
+  --sidebar-primary-foreground: oklch(0.17 0.01 154);
+  --sidebar-accent: oklch(0.19 0.006 286);
+  --sidebar-accent-foreground: oklch(0.965 0.005 286);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-ring: oklch(0.72 0.115 154 / 70%);
 }
 
 @layer base {
@@ -123,8 +90,27 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(circle at top, rgba(103, 195, 151, 0.14), transparent 24rem),
+      radial-gradient(circle at 80% 20%, rgba(255, 232, 184, 0.08), transparent 18rem),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(0, 0, 0, 0));
   }
   html {
-    @apply font-mono;
+    @apply font-sans;
+  }
+  html[data-site-scroll="on"] {
+    scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
+  }
+  a,
+  button,
+  input,
+  select,
+  textarea {
+    @apply transition-colors;
+  }
+  ::selection {
+    background: rgba(120, 0, 14, 0.3);
+    color: white;
   }
 }

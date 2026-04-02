@@ -1,9 +1,17 @@
-import React from 'react'
+/**
+ * Documentation layout with persistent navigation and readable article width.
+ */
+import type { ReactNode } from "react";
 
-const layout = () => {
+import { DocsSidebar } from "@/components/site/docs-sidebar";
+
+export default function DocsLayout({ children }: { children: ReactNode }) {
   return (
-    <div>layout</div>
-  )
+    <div className=" min-h-screen w-full">
+      <div className="w-64 h-full">
+        <DocsSidebar />
+      </div>
+      <div className="lg:pl-72 ">{children}</div>
+    </div>
+  );
 }
-
-export default layout

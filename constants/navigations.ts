@@ -1,4 +1,8 @@
+/**
+ * Shared navigation definitions for marketing, docs, auth, and dashboard surfaces.
+ */
 import type { IconName } from "./icons";
+import { DOCS_ARTICLES } from "./site-content";
 
 export type NavItem = {
   label: string;
@@ -18,7 +22,6 @@ export const SITE_HEADER_LINKS: NavItem[] = [
 export const SITE_FOOTER_LINKS: NavItem[] = [
   { label: "Docs", href: "/docs" },
   { label: "Pricing", href: "/pricing" },
-  { label: "Blog", href: "/blog", icon: "blog" },
   { label: "Changelog", href: "/changelog" },
   { label: "Support", href: "/support" },
   { label: "Terms", href: "/terms", icon: "terms" },
@@ -27,16 +30,17 @@ export const SITE_FOOTER_LINKS: NavItem[] = [
 export const AUTH_LINKS: NavItem[] = [
   { label: "Login", href: "/login", icon: "login" },
   { label: "Register", href: "/register", icon: "register" },
-  { label: "Forgot Password", href: "/forgot-password" },
-  { label: "Check Email", href: "/check-email" },
-  { label: "Verify Email", href: "/verify-email" },
-  { label: "Accept Invite", href: "/accept-invite" },
+  { label: "Forgot Password", href: "/forgot-password", icon: "support" },
+  { label: "Check Email", href: "/check-email", icon: "docs" },
+  { label: "Verify Email", href: "/verify-email", icon: "auth" },
+  { label: "Accept Invite", href: "/accept-invite", icon: "register" },
 ];
 
 export const DASHBOARD_LINKS: NavItem[] = [
   { label: "Overview", href: "/dashboard", icon: "dashboard" },
   { label: "Install", href: "/dashboard/install", icon: "cli" },
   { label: "Tunnels", href: "/dashboard/tunnels", icon: "tunnels" },
+  { label: "Tokens", href: "/dashboard/tokens", icon: "tokens" },
   { label: "Usage", href: "/dashboard/usage", icon: "usage" },
   { label: "Logs", href: "/dashboard/log", icon: "logs" },
   { label: "Integrations", href: "/dashboard/integrations", icon: "integrations" },
@@ -45,23 +49,33 @@ export const DASHBOARD_LINKS: NavItem[] = [
 ];
 
 export const DASHBOARD_SECONDARY_LINKS: NavItem[] = [
-  { label: "Tokens", href: "/dashboard/api", icon: "tokens" },
-  { label: "Total Requests", href: "/dashboard/total_requests", icon: "activity" },
+  { label: "Legacy token route", href: "/dashboard/api", icon: "tokens" },
+  { label: "Legacy usage route", href: "/dashboard/total_requests", icon: "activity" },
 ];
 
 export const DOCS_LINKS: NavItem[] = [
-  {
-    label: "Getting Started",
+  ...Array.from(new Set(DOCS_ARTICLES.map((article) => article.section))).map((section) => ({
+    label: section,
     href: "/docs",
-    children: [
-      { label: "Introduction", href: "/docs/introduction", icon: "home" },
-      { label: "Quick Start", href: "/docs/quick_start", icon: "docs" },
-      { label: "Authentication", href: "/docs/authentication", icon: "auth" },
-      { label: "CLI", href: "/docs/cli", icon: "cli" },
-      { label: "HTTP Tunnels", href: "/docs/http_tunnels", icon: "globe" },
-      { label: "Requests", href: "/docs/requests", icon: "activity" },
-      { label: "Debugging", href: "/docs/Debugging", icon: "bugs" },
-      { label: "Bugs", href: "/docs/bugs", icon: "bugs" },
-    ],
-  },
+    children: DOCS_ARTICLES.filter((article) => article.section === section).map(
+      (article) => ({
+        label: article.title,
+        href: `/docs/${article.slug}`,
+        icon:
+          article.slug === "introduction"
+            ? "home"
+            : article.slug === "authentication"
+              ? "auth"
+              : article.slug === "cli"
+                ? "cli"
+                : article.slug === "http-tunnels"
+                  ? "globe"
+                  : article.slug === "requests"
+                    ? "activity"
+                    : article.slug === "debugging" || article.slug === "bugs"
+                      ? "bugs"
+                      : "docs",
+      }),
+    ),
+  })),
 ];
