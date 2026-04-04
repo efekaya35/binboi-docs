@@ -40,6 +40,7 @@ export async function GET(request: Request) {
       protectedRoutes: [
         "/api/internal/health",
         "/api/internal/engine/health",
+        "/api/internal/control-plane/tokens/validate",
       ],
     },
   });

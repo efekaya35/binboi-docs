@@ -4,6 +4,7 @@
 import { env, hasEnvValues } from "@/lib/env";
 import {
   type EngineHealth,
+  type EngineSession,
   type EngineTunnel,
   type ServiceResult,
 } from "@/lib/backend/contracts";
@@ -89,20 +90,46 @@ function mapEngineHealth(value: unknown): EngineHealth {
 }
 
 function mapEngineTunnels(value: unknown): EngineTunnel[] {
+  const sessions = mapEngineSessions(value);
+
+  return sessions.map((session, index) => ({
+    id: session.id || `engine-tunnel-${index + 1}`,
+    name: session.name || `Tunnel ${index + 1}`,
+    status:
+      session.connection === "connected" || session.status === "connected"
+        ? "healthy"
+        : session.connection === "disconnected" || session.status === "disconnected"
+          ? "offline"
+          : "degraded",
+    lastSeenAt: session.lastSeenAt || session.createdAt || new Date().toISOString(),
+  }));
+}
+
+function mapEngineSessions(value: unknown): EngineSession[] {
   const payload = extractPayload(value);
-  const items = Array.isArray(payload) ? payload : [];
+  const items =
+    Array.isArray(payload)
+      ? payload
+      : isRecord(payload) && Array.isArray(payload.sessions)
+        ? payload.sessions
+        : [];
 
   return items.map((item, index) => {
     const record = isRecord(item) ? item : {};
-    const rawStatus = readString(record, "status", "health");
-
     return {
-      id: readString(record, "id") || `engine-tunnel-${index + 1}`,
-      name: readString(record, "name") || `Tunnel ${index + 1}`,
-      status:
-        rawStatus === "degraded" || rawStatus === "offline" ? rawStatus : "healthy",
+      id: readString(record, "id") || `engine-session-${index + 1}`,
+      name: readString(record, "name") || `Session ${index + 1}`,
+      subdomain: readString(record, "subdomain") || undefined,
+      protocol: readString(record, "protocol") || "http",
+      publicUrl: readString(record, "publicUrl", "public_url"),
+      target: readString(record, "target"),
+      status: readString(record, "status") || "unknown",
+      connection: readString(record, "connection") || "unknown",
+      localPort: readNumber(record, "localPort", "local_port"),
+      createdAt:
+        readString(record, "createdAt", "created_at") || new Date().toISOString(),
       lastSeenAt:
-        readString(record, "lastSeenAt", "updatedAt") || new Date().toISOString(),
+        readString(record, "lastSeenAt", "last_seen", "updatedAt") || undefined,
     };
   });
 }
@@ -122,6 +149,14 @@ export async function getEngineHealth() {
 export async function getEngineTunnels() {
   const result = await fetchServiceJson<unknown>("engine", env.engineTunnelsPath);
   return mapResult(result, mapEngineTunnels);
+}
+
+/**
+ * Returns live session records from the engine control plane.
+ */
+export async function getEngineSessions() {
+  const result = await fetchServiceJson<unknown>("engine", env.engineSessionsPath);
+  return mapResult(result, mapEngineSessions);
 }
 
 /**

@@ -96,3 +96,17 @@ export type EngineTunnel = {
   status: "healthy" | "degraded" | "offline";
   lastSeenAt: string;
 };
+
+export type EngineSession = {
+  id: string;
+  name: string;
+  subdomain?: string;
+  protocol: string;
+  publicUrl: string;
+  target: string;
+  status: string;
+  connection: string;
+  localPort: number;
+  createdAt: string;
+  lastSeenAt?: string;
+};

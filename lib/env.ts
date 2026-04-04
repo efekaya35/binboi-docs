@@ -59,8 +59,11 @@ export const env = {
     (isProduction ? "" : DEV_INTERNAL_SECRET),
   engineApiUrl: devServiceBase("/api/dev/engine", process.env.ENGINE_API_URL),
   engineApiKey: process.env.ENGINE_API_KEY ?? "",
-  engineHealthPath: process.env.ENGINE_HEALTH_PATH ?? "/v1/health",
-  engineTunnelsPath: process.env.ENGINE_TUNNELS_PATH ?? "/v1/tunnels",
+  engineHealthPath: process.env.ENGINE_HEALTH_PATH ?? "/healthz",
+  engineTunnelsPath:
+    process.env.ENGINE_TUNNELS_PATH ??
+    process.env.ENGINE_SESSIONS_PATH ??
+    "/v1/sessions",
   engineSessionsPath: process.env.ENGINE_SESSIONS_PATH ?? "/v1/sessions",
   engineConnectPath: process.env.ENGINE_CONNECT_PATH ?? "/v1/connect",
   internalApiUrl: process.env.INTERNAL_API_URL ?? (isProduction ? "" : appUrl),

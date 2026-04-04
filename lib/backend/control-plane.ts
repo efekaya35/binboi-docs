@@ -9,6 +9,16 @@ import type {
   UsageSummary,
 } from "@/lib/backend/contracts";
 import { fetchServiceJson } from "@/lib/backend/client";
+import {
+  createLocalToken,
+  getLocalBillingSummary,
+  getLocalCheckoutLink,
+  getLocalDashboardOverview,
+  getLocalTokens,
+  getLocalTunnels,
+  getLocalUsageSummary,
+  revokeLocalToken,
+} from "@/lib/backend/local-control-plane";
 
 const CONTROL_PLANE_PATHS = {
   overview: "/v1/dashboard/overview",
@@ -207,6 +217,11 @@ function mapResult<T>(
  * Loads normalized dashboard summary data from the control plane.
  */
 export async function getDashboardOverview() {
+  const localResult = await getLocalDashboardOverview();
+  if (localResult.configured) {
+    return localResult;
+  }
+
   const result = await fetchServiceJson<unknown>("controlPlane", CONTROL_PLANE_PATHS.overview);
   return mapResult(result, readOverview);
 }
@@ -215,6 +230,11 @@ export async function getDashboardOverview() {
  * Loads normalized tunnel data from the control plane.
  */
 export async function getTunnels() {
+  const localResult = await getLocalTunnels();
+  if (localResult.configured) {
+    return localResult;
+  }
+
   const result = await fetchServiceJson<unknown>("controlPlane", CONTROL_PLANE_PATHS.tunnels);
   return mapResult(result, readTunnels);
 }
@@ -223,6 +243,11 @@ export async function getTunnels() {
  * Loads normalized token data from the control plane.
  */
 export async function getTokens() {
+  const localResult = await getLocalTokens();
+  if (localResult.configured) {
+    return localResult;
+  }
+
   const result = await fetchServiceJson<unknown>("controlPlane", CONTROL_PLANE_PATHS.tokens);
   return mapResult(result, readTokens);
 }
@@ -231,6 +256,11 @@ export async function getTokens() {
  * Creates a new token against the control plane.
  */
 export async function createToken(input: TokenCreateInput) {
+  const localResult = await createLocalToken(input);
+  if (localResult.configured) {
+    return localResult;
+  }
+
   const result = await fetchServiceJson<unknown>("controlPlane", CONTROL_PLANE_PATHS.tokens, {
     method: "POST",
     body: JSON.stringify(input),
@@ -242,6 +272,11 @@ export async function createToken(input: TokenCreateInput) {
  * Revokes an existing token against the control plane.
  */
 export async function revokeToken(tokenId: string) {
+  const localResult = await revokeLocalToken(tokenId);
+  if (localResult.configured) {
+    return localResult;
+  }
+
   return fetchServiceJson<unknown>("controlPlane", `${CONTROL_PLANE_PATHS.tokens}/${tokenId}`, {
     method: "DELETE",
   });
@@ -251,6 +286,11 @@ export async function revokeToken(tokenId: string) {
  * Loads normalized usage data from the control plane.
  */
 export async function getUsageSummary() {
+  const localResult = await getLocalUsageSummary();
+  if (localResult.configured) {
+    return localResult;
+  }
+
   const result = await fetchServiceJson<unknown>("controlPlane", CONTROL_PLANE_PATHS.usage);
   return mapResult(result, readUsage);
 }
@@ -259,6 +299,11 @@ export async function getUsageSummary() {
  * Loads normalized billing data from the control plane.
  */
 export async function getBillingSummary() {
+  const localResult = await getLocalBillingSummary();
+  if (localResult.configured) {
+    return localResult;
+  }
+
   const result = await fetchServiceJson<unknown>("controlPlane", CONTROL_PLANE_PATHS.billing);
   return mapResult(result, readBilling);
 }
@@ -267,6 +312,11 @@ export async function getBillingSummary() {
  * Requests a checkout URL from the billing or control plane integration.
  */
 export async function createCheckoutLink(planId: string) {
+  const localResult = await getLocalCheckoutLink(planId);
+  if (localResult.configured) {
+    return localResult;
+  }
+
   return fetchServiceJson<{ url?: string }>("billing", CONTROL_PLANE_PATHS.checkout, {
     method: "POST",
     body: JSON.stringify({ planId }),

@@ -62,7 +62,7 @@ export default async function InstallPage() {
       title: "Bind the CLI to this control plane",
       description:
         "Create a token from the dashboard, then log the CLI into the product/control-plane URL.",
-      command: `export BINBOI_CONTROL_PLANE_URL=${env.appUrl}\nbinboi login --token <token>`,
+      command: `export BINBOI_CONTROL_PLANE_URL=${env.appUrl}\nbinboi auth login --token <token>`,
     },
     {
       eyebrow: "Step 3",
@@ -72,7 +72,7 @@ export default async function InstallPage() {
       command: env.engineApiUrl
         ? 'curl -H "Authorization: Bearer <ENGINE_API_KEY>" \\\n' +
           `  ${env.engineApiUrl}${env.engineHealthPath}`
-        : 'curl -H "Authorization: Bearer <ENGINE_API_KEY>" \\\n  http://localhost:9090/v1/health',
+        : 'curl -H "Authorization: Bearer <ENGINE_API_KEY>" \\\n  http://localhost:9090/healthz',
     },
   ];
 
@@ -88,7 +88,7 @@ export default async function InstallPage() {
         configured={engineOverview.configured}
         ok={engineOverview.health?.status === "healthy"}
         title="binboi-go engine connection"
-        description="The install surface now reads engine health through a centralized server-side adapter instead of embedding engine calls in UI components."
+        description="The install surface now reads real binboi-go engine health through a centralized server-side adapter instead of embedding engine calls in UI components."
         error={engineOverview.healthError ?? engineOverview.tunnelError}
       />
 
@@ -161,7 +161,7 @@ export default async function InstallPage() {
               </div>
               <div className="rounded-[18px] border border-white/[0.08] bg-[#080808] px-4 py-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-white/42">
-                  Engine tunnels
+                  Live sessions
                 </p>
                 <p className="mt-2 text-sm text-white/72">
                   {engineOverview.tunnelCount} returned
@@ -200,8 +200,8 @@ export default async function InstallPage() {
 
             <div className="space-y-3 text-sm leading-7 text-white/64">
               <p>Health: {engineOverview.expectedPaths.health}</p>
-              <p>Tunnels: {engineOverview.expectedPaths.tunnels}</p>
               <p>Sessions: {engineOverview.expectedPaths.sessions}</p>
+              <p>Session-backed tunnels: {engineOverview.expectedPaths.tunnels}</p>
               <p>Connect: {engineOverview.expectedPaths.connect}</p>
             </div>
           </Panel>
