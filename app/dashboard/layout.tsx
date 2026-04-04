@@ -18,34 +18,43 @@ export default async function DashboardLayout({
   const session = await requireAuthenticatedAppUser();
 
   return (
-    <div className="min-h-screen lg:pl-[292px] xl:pl-[300px]">
+    <div className="relative min-h-screen overflow-hidden bg-[#04070b] lg:pl-[292px] xl:pl-[300px]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(217,249,157,0.08),transparent_24rem),radial-gradient(circle_at_right,rgba(87,127,255,0.12),transparent_30rem)]" />
       <div className="hidden lg:block">
         <div className="fixed inset-y-0 left-0 z-40 w-[292px] border-r border-white/[0.07] xl:w-[300px]">
           <DashboardSidebar userEmail={session.email} />
         </div>
       </div>
 
-      <div className="px-4 py-4 sm:px-6 lg:px-8">
+      <div className="relative px-4 py-4 sm:px-6 lg:px-8">
         <div className="lg:hidden">
           <DashboardSidebar userEmail={session.email} />
         </div>
 
-        <div className="flex min-h-screen flex-col gap-6">
+        <div className="mx-auto flex min-h-screen max-w-[1380px] flex-col gap-6">
           <SurfaceShell
             glow="dual"
-            className="flex items-center justify-between rounded-[22px] px-5 py-4"
+            className="flex flex-col gap-4 rounded-[26px] px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
           >
-            <Link
-              href="/"
-              className="flex items-center gap-3 text-sm font-semibold tracking-[0.24em] text-foreground"
-            >
-              <AccentOrb />
-              <span>BINBOI</span>
-            </Link>
+            <div className="space-y-2">
+              <Link
+                href="/"
+                className="flex items-center gap-3 text-sm font-semibold tracking-[0.24em] text-foreground"
+              >
+                <AccentOrb />
+                <span>BINBOI</span>
+              </Link>
+              <p className="text-sm text-foreground/54">
+                Signed in as {session.name || session.email}
+              </p>
+            </div>
 
-            <div className="flex items-center gap-4 text-sm text-foreground/56">
+            <div className="flex flex-wrap items-center gap-3 text-sm text-foreground/56">
               <Link href="/docs" className="hover:text-foreground">
                 Docs
+              </Link>
+              <Link href="/dashboard/install" className="hover:text-foreground">
+                Install
               </Link>
               <Link href="/support" className="hover:text-foreground">
                 Support
@@ -61,7 +70,7 @@ export default async function DashboardLayout({
             </div>
           </SurfaceShell>
 
-          <div className="min-w-0 min-h-[60vh] space-y-6">{children}</div>
+          <div className="min-h-[60vh] min-w-0 space-y-6">{children}</div>
         </div>
       </div>
     </div>

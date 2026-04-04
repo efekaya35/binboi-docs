@@ -1,9 +1,12 @@
 /**
  * Dashboard overview page that summarizes workspace health and backend readiness.
  */
+import Link from "next/link";
+
 import { DashboardPageIntro } from "@/components/dashboard/dashboard-page-intro";
 import { IntegrationState } from "@/components/dashboard/integration-state";
 import { MetricCard } from "@/components/dashboard/metric-card";
+import { Button } from "@/components/ui/button";
 import { Panel } from "@/components/ui/panel";
 import {
   getDashboardOverview,
@@ -44,8 +47,8 @@ export default async function DashboardOverviewPage() {
     <div className="space-y-6">
       <DashboardPageIntro
         eyebrow="Overview"
-        title="Workspace health at a glance"
-        description="This page stays product-focused: healthy tunnels, active tokens, request volume, and whether the upstream control plane contract is already live."
+        title="Workspace health that stays readable"
+        description="See active tunnels, token posture, request volume, and whether the control plane is responding without digging through scattered setup pages."
       />
 
       <IntegrationState
@@ -55,6 +58,71 @@ export default async function DashboardOverviewPage() {
         description="The overview reads from the control plane adapter so this screen becomes real as soon as backend URLs and secrets are configured."
         error={overviewResult.error}
       />
+
+      <div className="grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
+        <Panel className="surface-panel surface-panel-dual space-y-5 border-white/[0.07] p-7">
+          <div className="space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-foreground/46">
+              Current workspace
+            </p>
+            <h2 className="text-3xl font-semibold tracking-tight text-foreground">
+              Local tunnels, tokens, and usage are now wired into one calmer dashboard.
+            </h2>
+            <p className="max-w-2xl text-sm leading-8 text-foreground/62">
+              Use this screen to spot whether the system is healthy, then jump straight
+              into tunnels, token rotation, or install steps without losing context.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Button asChild>
+              <Link href="/dashboard/tunnels">Open tunnels</Link>
+            </Button>
+            <Button asChild variant="secondary">
+              <Link href="/dashboard/tokens">Manage tokens</Link>
+            </Button>
+            <Button asChild variant="ghost">
+              <Link href="/dashboard/install">Review install</Link>
+            </Button>
+          </div>
+        </Panel>
+
+        <Panel className="space-y-4 border-white/[0.07] p-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-foreground/42">
+            Snapshot
+          </p>
+          <div className="grid gap-3">
+            {[
+              {
+                label: "Tunnel posture",
+                value: `${formatNumber(activeTunnels)} active`,
+                detail: "Shared preview and webhook routes currently visible to the workspace.",
+              },
+              {
+                label: "Token posture",
+                value: `${formatNumber(activeTokens)} active`,
+                detail: "Scoped credentials available for operators, CI, and scripted flows.",
+              },
+              {
+                label: "Traffic today",
+                value: formatNumber(requestsToday),
+                detail: "Requests observed by the current control-plane usage payload.",
+              },
+            ].map((item) => (
+              <div
+                key={item.label}
+                className="rounded-[22px] border border-white/[0.08] bg-white/[0.025] px-4 py-4"
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-foreground/40">
+                  {item.label}
+                </p>
+                <p className="mt-2 text-lg font-semibold text-foreground">{item.value}</p>
+                <p className="mt-2 text-sm leading-6 text-foreground/56">{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </Panel>
+      </div>
 
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard
@@ -80,8 +148,13 @@ export default async function DashboardOverviewPage() {
       </div>
 
       <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
-        <Panel className="surface-panel surface-panel-blue space-y-4 border-white/[0.07]">
-          <h2 className="text-xl font-semibold text-foreground">Recent tunnels</h2>
+        <Panel className="surface-panel surface-panel-blue space-y-4 border-white/[0.07] p-0">
+          <div className="border-b border-white/[0.08] px-6 py-5">
+            <h2 className="text-xl font-semibold text-foreground">Recent tunnels</h2>
+            <p className="mt-2 text-sm leading-7 text-foreground/58">
+              The most recent tunnel surfaces returned by the control plane.
+            </p>
+          </div>
           <div className="overflow-hidden rounded-[24px] border border-white/8">
             <table className="min-w-full divide-y divide-white/8 text-left text-sm">
               <thead className="bg-white/[0.025] text-foreground/48">
@@ -111,8 +184,13 @@ export default async function DashboardOverviewPage() {
           </div>
         </Panel>
 
-        <Panel className="surface-panel surface-panel-blue space-y-4 border-white/[0.07]">
-          <h2 className="text-xl font-semibold text-foreground">Top routes</h2>
+        <Panel className="surface-panel surface-panel-blue space-y-4 border-white/[0.07] p-6">
+          <div className="space-y-2">
+            <h2 className="text-xl font-semibold text-foreground">Top routes</h2>
+            <p className="text-sm leading-7 text-foreground/58">
+              Route activity from the current usage payload so you can see where traffic is clustering.
+            </p>
+          </div>
           <div className="space-y-3">
             {usageResult.data?.topRoutes.length ? (
               usageResult.data.topRoutes.slice(0, 5).map((route) => (

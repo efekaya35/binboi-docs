@@ -9,6 +9,17 @@ Purpose: server-only adapters that connect the Next.js product surface to Binboi
 - `billing`: checkout URL minting surface used by dashboard billing actions.
 - `engine`: `binboi-go` service used by install/health flows and internal engine checks.
 
+## Local dev fallback
+
+When `AUTH_API_URL`, `CONTROL_PLANE_API_URL`, `BILLING_API_URL`, or `ENGINE_API_URL` are not set outside production, the app now falls back to local dev routes under `app/api/dev`.
+
+Default demo login:
+- email: `demo@binboi.dev`
+- password: `demo12345`
+
+Default internal secret for localhost-only checks:
+- `binboi-local-internal-secret`
+
 ## Files
 
 - `client.ts`: central authenticated fetch helper for upstream services.

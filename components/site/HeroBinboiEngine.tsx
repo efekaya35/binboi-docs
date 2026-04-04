@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/purity */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
@@ -37,10 +36,9 @@ const LAYOUTS = [
     [2],
 ];
 
-const generateRandomScenario = (prevModuleId: string | null = null) => {
-    const availableModules = MODULES.filter(m => m.id !== prevModuleId);
-    const randomModule = availableModules[Math.floor(Math.random() * availableModules.length)];
-    const layoutIndexes = LAYOUTS[Math.floor(Math.random() * LAYOUTS.length)];
+function createScenario(moduleIndex: number, layoutIndex: number, tick: number) {
+    const selectedModule = MODULES[moduleIndex % MODULES.length];
+    const layoutIndexes = LAYOUTS[layoutIndex % LAYOUTS.length];
 
     const nodes: any[] = [];
     const paths: any[] = [];
@@ -49,46 +47,59 @@ const generateRandomScenario = (prevModuleId: string | null = null) => {
         const slot = SLOTS[slotIndex];
 
         nodes.push({
-            id: `node-${slot.id}-${Date.now()}`,
-            title: `Execute ${randomModule.label}`,
-            sub: `Port ${Math.floor(Math.random() * 8000) + 1000} tunneling...`,
+            id: `node-${slot.id}-${tick}`,
+            title: `Execute ${selectedModule.label}`,
+            sub: `Port ${4100 + moduleIndex * 320 + slotIndex * 40} tunneling...`,
             x: 520,
             y: slot.y,
             delay: i * 0.1
         });
 
         paths.push({
-            id: `in-${slot.id}-${Date.now()}`,
+            id: `in-${slot.id}-${tick}`,
             d: `M 300 280 C 410 280, 410 ${slot.portY}, 520 ${slot.portY}`,
-            delay: Math.random() * 0.4
+            delay: 0.08 * (i + 1),
+            duration: 2.5 + slotIndex * 0.2
         });
 
         paths.push({
-            id: `out-${slot.id}-${Date.now()}`,
+            id: `out-${slot.id}-${tick}`,
             d: slot.portY === 300
                 ? `M 780 300 L 850 300`
                 : `M 780 ${slot.portY} C 820 ${slot.portY}, 810 300, 850 300`,
-            delay: Math.random() * 0.4 + 0.3
+            delay: 0.35 + i * 0.08,
+            duration: 2.9 + slotIndex * 0.18
         });
     });
 
     const logs = [
-        `Incoming request via ${randomModule.label}...`,
+        `Incoming request via ${selectedModule.label}...`,
         `> Authenticating tunnel identity`,
         `> Bypassing NAT and Firewalls...`,
-        `Success! Tunneled ${Math.floor(Math.random() * 120) + 10}ms to localhost. ⚡`
+        `Success! Tunneled ${24 + moduleIndex * 11 + layoutIndex * 7}ms to localhost.`
     ];
 
     return {
-        key: Date.now().toString(),
-        module: randomModule,
+        key: `scenario-${tick}`,
+        module: selectedModule,
         nodes,
         paths,
         logs
     };
+}
+
+const INITIAL_SCENARIO = createScenario(0, 0, 0);
+
+const generateRandomScenario = (prevModuleId: string | null = null) => {
+    const availableModules = MODULES.filter(m => m.id !== prevModuleId);
+    const randomModule = availableModules[Math.floor(Math.random() * availableModules.length)];
+    const randomLayoutIndex = Math.floor(Math.random() * LAYOUTS.length);
+    const moduleIndex = MODULES.findIndex((module) => module.id === randomModule.id);
+
+    return createScenario(moduleIndex, randomLayoutIndex, Date.now());
 };
 
-function GlowingWire({ path, color, delay }: { path: string, color: string, delay: number }) {
+function GlowingWire({ path, color, delay, duration }: { path: string, color: string, delay: number, duration: number }) {
     return (
         <g>
             <path d={path} stroke="#1a1a1c" strokeWidth={16} fill="none" strokeLinecap="round" style={{ filter: 'drop-shadow(0 5px 10px rgba(0,0,0,0.8))' }} />
@@ -98,7 +109,7 @@ function GlowingWire({ path, color, delay }: { path: string, color: string, dela
                 initial={{ opacity: 0 }}
                 animate={{ opacity: [0, 1, 1], strokeDashoffset: [0, -1000] }}
                 exit={{ opacity: 0 }}
-                transition={{ opacity: { delay: delay, duration: 0.3 }, strokeDashoffset: { duration: 2.5 + Math.random(), repeat: Infinity, ease: 'linear' } }}
+                transition={{ opacity: { delay: delay, duration: 0.3 }, strokeDashoffset: { duration, repeat: Infinity, ease: 'linear' } }}
                 style={{ filter: `drop-shadow(0 0 15px ${color}) drop-shadow(0 0 30px ${color})` }}
             />
         </g>
@@ -172,7 +183,7 @@ function ProcessNode({ node }: { node: any }) {
 }
 
 export default function HeroBinboiEngine() {
-    const [scenario, setScenario] = useState(generateRandomScenario());
+    const [scenario, setScenario] = useState(INITIAL_SCENARIO);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -190,7 +201,7 @@ export default function HeroBinboiEngine() {
                             <AnimatePresence mode="wait">
                                 <motion.g key={scenario.key}>
                                     {scenario.paths.map((pathObj) => (
-                                        <GlowingWire key={pathObj.id} path={pathObj.d} color={scenario.module.color} delay={pathObj.delay} />
+                                        <GlowingWire key={pathObj.id} path={pathObj.d} color={scenario.module.color} delay={pathObj.delay} duration={pathObj.duration} />
                                     ))}
                                 </motion.g>
                             </AnimatePresence>

@@ -111,6 +111,17 @@ async function readPayload(response: Response) {
   return text || null;
 }
 
+function buildEndpoint(baseUrl: string, path: string) {
+  if (/^https?:\/\//i.test(path)) {
+    return path;
+  }
+
+  const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+  const normalizedPath = path.replace(/^\/+/, "");
+
+  return new URL(normalizedPath, normalizedBase).toString();
+}
+
 /**
  * Performs server-side fetches to the configured upstream service and standardizes failures.
  */
@@ -132,7 +143,7 @@ export async function fetchServiceJson<T>(
 
   await connection();
 
-  const endpoint = new URL(path, config.baseUrl).toString();
+  const endpoint = buildEndpoint(config.baseUrl, path);
   const headers = new Headers(init?.headers);
   headers.set("Accept", "application/json");
 

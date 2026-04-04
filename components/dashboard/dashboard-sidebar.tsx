@@ -24,18 +24,30 @@ export function DashboardSidebar({ userEmail }: DashboardSidebarProps) {
   return (
     <aside className="surface-rail flex h-full min-h-0 flex-col overflow-hidden">
       <div className="border-b border-white/[0.07] px-6 py-7">
-        <div className="flex items-center justify-between gap-4">
+        <div className="space-y-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-foreground/48">
-              Workspace
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-foreground/42">
+              Binboi dashboard
             </p>
-            <p className="mt-2 text-sm text-foreground/70">Binboi Cloud</p>
+            <p className="mt-3 text-lg font-semibold text-foreground">Workspace control</p>
           </div>
-          <Badge className="text-foreground/72">Live</Badge>
+
+          <div className="flex items-center justify-between gap-4 rounded-[22px] border border-white/[0.08] bg-white/[0.025] px-4 py-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-foreground/42">
+                Workspace
+              </p>
+              <p className="mt-2 text-sm text-foreground/72">Binboi Cloud</p>
+            </div>
+            <Badge className="text-foreground/72">Live</Badge>
+          </div>
         </div>
       </div>
 
       <div className="flex-1 overflow-y-auto px-5 py-5" data-native-scroll="true">
+        <p className="px-3 pb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-foreground/34">
+          Product areas
+        </p>
         <nav className="space-y-1">
           {DASHBOARD_LINKS.map((link) => (
             <Link
