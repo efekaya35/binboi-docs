@@ -1,12 +1,9 @@
 import React from 'react'
-import { Footer } from '../../../../components/site/site-footer'
 
-const page = () => {
+const Provider = () => {
   return (
-    <div>
-      <Footer/>
-    </div>
+    <div>Provider</div>
   )
 }
 
-export default page
+export default Provider

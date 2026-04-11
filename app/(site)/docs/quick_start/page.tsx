@@ -1,5 +1,9 @@
-import { DocsRoutePage } from "@/components/docs/docs-route-page";
+import React from 'react'
 
-export default function Page() {
-  return <DocsRoutePage pageKey="quick_start" />;
+const page = () => {
+  return (
+    <div>page</div>
+  )
 }
+
+export default page

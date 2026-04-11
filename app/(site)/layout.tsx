@@ -12,12 +12,12 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <div className="relative min-h-screen overflow-hidden">
-         <Navbar/>
+      
         <main className="min-w-full h-full">
          
-        <SmoothScrolling>
+        <>
           {children}
-        </SmoothScrolling>
+        </>
         </main>
         {/* <SiteFooter /> */}
       </div>

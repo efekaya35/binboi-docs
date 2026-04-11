@@ -1,22 +1,10 @@
-import BentoGrid from "../../components/site/bento-grid"
-import { CapabilitySection } from "../../components/site/CapabilitySection"
-import { FeatureCard } from "../../components/site/feature-card"
-import HeroBinboiEngine from "../../components/site/HeroBinboiEngine"
-import { LandingExtensions } from "../../components/site/landing-extensions"
-import { Footer } from "../../components/site/site-footer"
+import { redirect } from "next/navigation";
 
-
-const page = () => {
-  return (
-    <div className='mt-20'>
-      <HeroBinboiEngine />
-      <FeatureCard/>
-      <BentoGrid/>
-      <CapabilitySection/>
-      <LandingExtensions />
-      <Footer/>
-    </div>
-  )
+export default function Page() {
+  // Bu fonksiyon çağrıldığı an Next.js geri kalan render işlemini durdurur
+  // ve kullanıcıyı direkt /docs yoluna fırlatır.
+  redirect("/docs");
+  
+  // redirect'ten sonra kod yazmana gerek yok, burası asla çalışmaz (unreachable).
+  return null; 
 }
-
-export default page
