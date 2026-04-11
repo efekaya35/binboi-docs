@@ -15,16 +15,19 @@ export function Navbar() {
 
           {/* Left — brand */}
           <div className="flex items-center gap-6">
-            <Link href="/docs" className="flex items-center gap-2.5">
+            <Link href="https://binboi.com" className="flex items-center gap-2.5">
               {/* Wordmark */}
+              <img src="/logo.png" alt="" className="w-16" />
+
+            </Link>
+            <div>
               <span className="font-semibold tracking-tight text-white">
                 binboi
               </span>
               <span className="hidden rounded-md border border-white/[0.1] bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-white/40 sm:inline">
                 docs
               </span>
-            </Link>
-
+            </div>
             {/* Divider */}
             <span className="hidden h-4 w-px bg-white/[0.1] md:block" aria-hidden="true" />
 
