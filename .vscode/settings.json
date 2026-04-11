@@ -1,0 +1,14 @@
+{
+  "files.associations": {
+    "*.mdx": "mdx"
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "mdx"
+  ],
+  "editor.unicodeHighlight.ambiguousCharacters": false,
+  "editor.unicodeHighlight.invisibleCharacters": false
+}

@@ -8,7 +8,7 @@ import { Space_Mono } from "next/font/google";
 
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { createMetadata } from "@/lib/metadata";
+
 
 // 1. Satoshi Font Yapılandırması
 // Not: Font dosyalarının app/fonts/ klasöründe olduğunu varsayıyoruz.
@@ -47,7 +47,11 @@ const spaceMono = Space_Mono({
   variable: "--font-space-mono",
 });
 
-export const metadata: Metadata = createMetadata();
+export const metadata: Metadata = (
+  {
+    
+  }
+);
 
 export default function RootLayout({
   children,
